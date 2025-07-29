@@ -285,7 +285,7 @@ class Attention(nn.Module):
                 return self.impl.forward(self, query, key, value,
                                          self_kv_cache, attn_metadata)
             else:
-                return torch.ops.vllm.unified_attention(
+                return torch.ops.vllm.unified_attention_offload(
                     query, key, value, self.layer_name)
 
     def calc_kv_scales(self, query, key, value):
@@ -449,6 +449,33 @@ def unified_attention(
                                attn_metadata)
 
     maybe_save_kv_layer_to_connector(layer_name, kv_cache)
+    return output
+
+def unified_attention_offload(
+    query: torch.Tensor,
+    key: torch.Tensor,
+    value: torch.Tensor,
+    layer_name: str,
+) -> torch.Tensor:
+    wait_for_kv_layer_from_connector(layer_name)
+
+    forward_context: ForwardContext = get_forward_context()
+    attn_metadata = forward_context.attn_metadata
+    if isinstance(attn_metadata, dict):
+        attn_metadata = attn_metadata[layer_name]
+    self = forward_context.no_compile_layers[layer_name]
+    output = None
+
+    connector = get_kv_transfer_group()
+    if forward_context.attn_metadata.prefill_metadata != None:
+        kv_cache = self.kv_cache[forward_context.virtual_engine]
+        output = self.impl.forward(self, query, key, value, kv_cache,
+                                attn_metadata)
+        connector.save_kv_layer(layer_name, kv_cache,
+                            attn_metadata[layer_name], self.impl)
+    else:
+        connector.save_kv_layer_decode(layer_name, query, key, value, output,
+                            self._q_scale, self._k_scale, self._v_scale, attn_metadata)
     return output
 
 

@@ -76,6 +76,18 @@ class LMCacheConnectorV1(KVConnectorBase_V1):
         """
         self._lmcache_engine.save_kv_layer(layer_name, kv_layer, attn_metadata,
                                            **kwargs)
+    
+    def save_kv_layer_decode(self, layer_name: str, 
+        query: torch.Tensor, 
+        key: torch.Tensor,
+        value: torch.Tensor,
+        output : torch.Tensor,
+        q_scale: torch.Tensor,
+        k_scale: torch.Tensor,
+        v_scale: torch.Tensor,
+        attn_metadata: "AttentionMetadata", **kwargs) -> None:
+        self._lmcache_engine.save_kv_layer_decode(layer_name, query, key, value, output, q_scale, k_scale, v_scale, attn_metadata,
+                                           **kwargs)
 
     def wait_for_save(self):
         """
