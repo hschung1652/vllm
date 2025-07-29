@@ -193,6 +193,17 @@ class KVConnectorBase_V1(ABC):
         """
         pass
 
+    def save_kv_layer_decode(self, layer_name: str, 
+        query: torch.Tensor, 
+        key: torch.Tensor,
+        value: torch.Tensor,
+        output : torch.Tensor,
+        q_scale: torch.Tensor,
+        k_scale: torch.Tensor,
+        v_scale: torch.Tensor,
+        attn_metadata: "AttentionMetadata", **kwargs) -> None:
+        pass
+
     @abstractmethod
     def wait_for_save(self):
         """
