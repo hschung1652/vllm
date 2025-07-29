@@ -41,6 +41,7 @@ import torch
 
 from vllm.logger import init_logger
 from vllm.v1.core.sched.output import SchedulerOutput
+from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 
 if TYPE_CHECKING:
     from vllm.attention.backends.abstract import AttentionMetadata
@@ -48,7 +49,6 @@ if TYPE_CHECKING:
     from vllm.forward_context import ForwardContext
     from vllm.v1.core.kv_cache_manager import KVCacheBlocks
     from vllm.v1.request import Request
-    from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 
 # s_tensor_list, d_tensor_list, s_indices, d_indices, direction
 CopyBlocksOp = Callable[[
