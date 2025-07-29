@@ -517,6 +517,7 @@ def unified_attention_with_output(
     if attn_metadata == None:
         return
     elif attn_metadata.num_actual_tokens < 1:
+        print(attn_metadata.num_actual_tokens)
         kv_cache = self.kv_cache[forward_context.virtual_engine]
         self.impl.forward(self,
                       query,
@@ -529,6 +530,7 @@ def unified_attention_with_output(
         connector.save_kv_layer(layer_name, kv_cache,
                             attn_metadata[layer_name], self.impl)
     else:
+        print(attn_metadata.num_actual_tokens)
         connector.save_kv_layer_decode(layer_name, query, key, value, output,
                             self._q_scale, self._k_scale, self._v_scale, attn_metadata)
 
