@@ -516,7 +516,7 @@ def unified_attention_with_output(
     connector = get_kv_transfer_group()
     if attn_metadata == None:
         return
-    elif attn_metadata.prefill_metadata != None:
+    elif attn_metadata.num_actual_tokens < 1:
         kv_cache = self.kv_cache[forward_context.virtual_engine]
         self.impl.forward(self,
                       query,
