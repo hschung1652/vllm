@@ -514,7 +514,9 @@ def unified_attention_with_output(
     kv_cache = self.kv_cache[forward_context.virtual_engine]
 
     connector = get_kv_transfer_group()
-    if attn_metadata == None or attn_metadata.prefill_metadata != None:
+    if attn_metadata == None:
+        return
+    elif attn_metadata.prefill_metadata != None:
         kv_cache = self.kv_cache[forward_context.virtual_engine]
         self.impl.forward(self,
                       query,
