@@ -512,7 +512,11 @@ def unified_attention_with_output(
         attn_metadata = attn_metadata[layer_name]
     self = forward_context.no_compile_layers[layer_name]
     kv_cache = self.kv_cache[forward_context.virtual_engine]
-    self.impl.forward(self,
+
+    connector = get_kv_transfer_group()
+    if forward_context.attn_metadata.prefill_metadata != None:
+        kv_cache = self.kv_cache[forward_context.virtual_engine]
+        self.impl.forward(self,
                       query,
                       key,
                       value,
@@ -520,8 +524,11 @@ def unified_attention_with_output(
                       attn_metadata,
                       output=output,
                       output_scale=output_scale)
-
-    maybe_save_kv_layer_to_connector(layer_name, kv_cache)
+        connector.save_kv_layer(layer_name, kv_cache,
+                            attn_metadata[layer_name], self.impl)
+    else:
+        connector.save_kv_layer_decode(layer_name, query, key, value, output,
+                            self._q_scale, self._k_scale, self._v_scale, attn_metadata)
 
 
 def unified_attention_with_output_fake(
