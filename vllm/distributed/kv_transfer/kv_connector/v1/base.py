@@ -48,6 +48,7 @@ if TYPE_CHECKING:
     from vllm.forward_context import ForwardContext
     from vllm.v1.core.kv_cache_manager import KVCacheBlocks
     from vllm.v1.request import Request
+    from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 
 # s_tensor_list, d_tensor_list, s_indices, d_indices, direction
 CopyBlocksOp = Callable[[
@@ -178,7 +179,7 @@ class KVConnectorBase_V1(ABC):
 
     @abstractmethod
     def save_kv_layer(self, layer_name: str, kv_layer: torch.Tensor,
-                      attn_metadata: "AttentionMetadata", **kwargs) -> None:
+                      attn_metadata: "AttentionMetadata", attn_impl = FlashAttentionImpl, **kwargs) -> None:
         """
         Start saving a layer of KV cache from vLLM's paged buffer 
         to the connector. This is called from within attention layer to

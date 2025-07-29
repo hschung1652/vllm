@@ -8,6 +8,7 @@ from lmcache.integration.vllm.vllm_v1_adapter import LMCacheConnectorV1Impl
 from vllm.config import VllmConfig
 from vllm.distributed.kv_transfer.kv_connector.v1.base import (
     KVConnectorBase_V1, KVConnectorMetadata, KVConnectorRole)
+from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 from vllm.logger import init_logger
 from vllm.v1.core.sched.output import SchedulerOutput
 
@@ -61,7 +62,7 @@ class LMCacheConnectorV1(KVConnectorBase_V1):
         self._lmcache_engine.wait_for_layer_load(layer_name)
 
     def save_kv_layer(self, layer_name: str, kv_layer: torch.Tensor,
-                      attn_metadata: "AttentionMetadata", **kwargs) -> None:
+                      attn_metadata: "AttentionMetadata", attn_impl: "FlashAttentionImpl", **kwargs) -> None:
         """
         Start saving the a layer of KV cache from vLLM's paged buffer 
         to the connector. This is called from within attention layer to
@@ -74,7 +75,7 @@ class LMCacheConnectorV1(KVConnectorBase_V1):
             attn_metadata (AttentionMetadata): the attention metadata.
             **kwargs: additional arguments for the save operation.
         """
-        self._lmcache_engine.save_kv_layer(layer_name, kv_layer, attn_metadata,
+        self._lmcache_engine.save_kv_layer(layer_name, kv_layer, attn_metadata, attn_impl
                                            **kwargs)
     
     def save_kv_layer_decode(self, layer_name: str, 
