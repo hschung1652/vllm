@@ -525,7 +525,7 @@ def unified_attention_with_output(
                       attn_metadata,
                       output=output,
                       output_scale=output_scale)
-    elif attn_metadata.prefill_metadata != None:
+    elif attn_metadata.max_seq_len == attn_metadata.num_actual_tokens:
         self.impl.forward(self,
                       query,
                       key,
