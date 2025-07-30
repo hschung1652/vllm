@@ -41,7 +41,7 @@ import torch
 
 from vllm.logger import init_logger
 from vllm.v1.core.sched.output import SchedulerOutput
-from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
+#from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 
 if TYPE_CHECKING:
     from vllm.attention.backends.abstract import AttentionMetadata
@@ -179,7 +179,7 @@ class KVConnectorBase_V1(ABC):
 
     @abstractmethod
     def save_kv_layer(self, layer_name: str, kv_layer: torch.Tensor,
-                      attn_metadata: "AttentionMetadata", attn_impl: "FlashAttentionImpl", **kwargs) -> None:
+                      attn_metadata: "AttentionMetadata", attn_impl, **kwargs) -> None:
         """
         Start saving a layer of KV cache from vLLM's paged buffer 
         to the connector. This is called from within attention layer to
