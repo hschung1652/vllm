@@ -514,8 +514,6 @@ def unified_attention_with_output(
     kv_cache = self.kv_cache[forward_context.virtual_engine]
 
     connector = get_kv_transfer_group()
-    print(layer_name)
-    print(attn_metadata)
     if attn_metadata == None:
         self.impl.forward(self,
                       query,
