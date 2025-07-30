@@ -517,7 +517,15 @@ def unified_attention_with_output(
     print(layer_name)
     print(attn_metadata)
     if attn_metadata == None:
-        kv_cache = self.kv_cache[forward_context.virtual_engine]
+        self.impl.forward(self,
+                      query,
+                      key,
+                      value,
+                      kv_cache,
+                      attn_metadata,
+                      output=output,
+                      output_scale=output_scale)
+    elif attn_metadata.prefill_metadata != None:
         self.impl.forward(self,
                       query,
                       key,
