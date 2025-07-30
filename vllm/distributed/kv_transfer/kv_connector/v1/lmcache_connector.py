@@ -75,7 +75,7 @@ class LMCacheConnectorV1(KVConnectorBase_V1):
             attn_metadata (AttentionMetadata): the attention metadata.
             **kwargs: additional arguments for the save operation.
         """
-        self._lmcache_engine.save_kv_layer(layer_name, kv_layer, attn_metadata, attn_impl
+        self._lmcache_engine.save_kv_layer(layer_name, kv_layer, attn_metadata, attn_impl,
                                            **kwargs)
     
     def save_kv_layer_decode(self, layer_name: str, 
