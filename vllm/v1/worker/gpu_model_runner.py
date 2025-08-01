@@ -1538,10 +1538,10 @@ class GPUModelRunner(LoRAModelRunnerMixin, KVConnectorModelRunnerMixin):
             print("use_aux_hidden_state_outputs")
             hidden_states, aux_hidden_states = model_output
         else:
-            hidden_states = model_output.detach().clone()
+            hidden_states = model_output
             aux_hidden_states = None
         
-        print(hidden_states)
+        print(hidden_states.device)
 
         # Broadcast PP output for external_launcher (torchrun)
         # to make sure we are synced across pp ranks
