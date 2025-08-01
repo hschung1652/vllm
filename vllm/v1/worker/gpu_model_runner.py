@@ -1534,6 +1534,8 @@ class GPUModelRunner(LoRAModelRunnerMixin, KVConnectorModelRunnerMixin):
                 self.get_finished_kv_transfers(scheduler_output))
             finished_loading_dict = self.get_finished_loading(scheduler_output)
 
+        print(model_output)
+        
         if self.use_aux_hidden_state_outputs:
             hidden_states, aux_hidden_states = model_output
         else:
@@ -1613,6 +1615,9 @@ class GPUModelRunner(LoRAModelRunnerMixin, KVConnectorModelRunnerMixin):
                 sampling_metadata,
             )
             sampler_output.sampled_token_ids = output_token_ids
+
+        print(sampler_output)
+        print(logits)
 
         num_nans_in_logits = {}
         if envs.VLLM_COMPUTE_NANS_IN_LOGITS:
