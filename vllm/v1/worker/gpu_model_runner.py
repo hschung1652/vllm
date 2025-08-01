@@ -1533,14 +1533,15 @@ class GPUModelRunner(LoRAModelRunnerMixin, KVConnectorModelRunnerMixin):
             finished_sending, finished_recving = (
                 self.get_finished_kv_transfers(scheduler_output))
             finished_loading_dict = self.get_finished_loading(scheduler_output)
-
-        print(model_output)
         
         if self.use_aux_hidden_state_outputs:
+            print("use_aux_hidden_state_outputs")
             hidden_states, aux_hidden_states = model_output
         else:
-            hidden_states = model_output
+            hidden_states = model_output.detach().clone()
             aux_hidden_states = None
+        
+        print(hidden_states)
 
         # Broadcast PP output for external_launcher (torchrun)
         # to make sure we are synced across pp ranks
