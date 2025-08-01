@@ -534,7 +534,6 @@ def unified_attention_with_output(
                       output_scale=output_scale)
         connector.save_kv_layer(layer_name, kv_cache,
                             attn_metadata, self.impl)
-        print(output)
     else:
         connector.save_kv_layer_decode(layer_name, query, key, value, output,
                             self._q_scale, self._k_scale, self._v_scale, attn_metadata)
