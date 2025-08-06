@@ -195,7 +195,7 @@ class KVConnectorBase_V1(ABC):
         pass
 
     @abstractmethod
-    def save_kv_layer_decode(self, layer_name: str, 
+    def update_kv_cache(self, layer_name: str, 
         query: torch.Tensor, 
         key: torch.Tensor,
         value: torch.Tensor,
