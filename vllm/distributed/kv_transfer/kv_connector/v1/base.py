@@ -41,6 +41,7 @@ import torch
 
 from vllm.logger import init_logger
 from vllm.v1.core.sched.output import SchedulerOutput
+from vllm.config import CacheDType
 #from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 
 if TYPE_CHECKING:
@@ -203,6 +204,7 @@ class KVConnectorBase_V1(ABC):
         q_scale: torch.Tensor,
         k_scale: torch.Tensor,
         v_scale: torch.Tensor,
+        cache_dtype: CacheDType,
         attn_metadata: "AttentionMetadata", **kwargs) -> None:
         pass
 

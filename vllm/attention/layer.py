@@ -536,7 +536,7 @@ def unified_attention_with_output(
                             attn_metadata, self.impl)
     else:
         connector.update_kv_cache(layer_name, query, key, value, output,
-                            self._q_scale, self._k_scale, self._v_scale, attn_metadata)
+                            self._q_scale, self._k_scale, self._v_scale, self.impl.cache_config.cache_dtype, attn_metadata)
 
 
 def unified_attention_with_output_fake(

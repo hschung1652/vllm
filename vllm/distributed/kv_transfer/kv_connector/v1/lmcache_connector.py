@@ -10,6 +10,7 @@ from vllm.distributed.kv_transfer.kv_connector.v1.base import (
     KVConnectorBase_V1, KVConnectorMetadata, KVConnectorRole)
 from vllm.v1.attention.backends.flash_attn import FlashAttentionImpl
 from vllm.logger import init_logger
+from vllm.config import CacheDType
 from vllm.v1.core.sched.output import SchedulerOutput
 
 if TYPE_CHECKING:
@@ -86,8 +87,9 @@ class LMCacheConnectorV1(KVConnectorBase_V1):
         q_scale: torch.Tensor,
         k_scale: torch.Tensor,
         v_scale: torch.Tensor,
+        cache_dtype: CacheDType,
         attn_metadata: "AttentionMetadata", **kwargs) -> None:
-        self._lmcache_engine.update_kv_cache(layer_name, query, key, value, output, q_scale, k_scale, v_scale, attn_metadata,
+        self._lmcache_engine.update_kv_cache(layer_name, query, key, value, output, q_scale, k_scale, v_scale, cache_dtype, attn_metadata,
                                            **kwargs)
         
     def wait_for_save(self):
